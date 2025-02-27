@@ -45,8 +45,9 @@ public class UserServiceImpl implements UserService {
                 .altPhoneNumber(userRequest.getAltPhoneNumber())
                 .status("ACTIVE")
                 .accountBalance(BigDecimal.ZERO)
+                .accountNumber("1234567890")
                 .build();
-
+//TODO:PHONE NUMBER CANNOT EXISTS TWICE
 //        SAVE THE USER TO THE DATABASE
         userRepository.save(user);
 

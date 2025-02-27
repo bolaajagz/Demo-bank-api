@@ -49,6 +49,12 @@
             <optional>true</optional>
         </dependency>
 
+        <!--        <dependency>-->
+        <!--            <groupId>com.google.code.gson</groupId>-->
+        <!--            <artifactId>gson</artifactId>-->
+        <!--            <version>2.8.9</version>-->
+        <!--        </dependency>-->
+
         <!-- PostgreSQL dependency -->
         <dependency>
             <groupId>org.postgresql</groupId>
