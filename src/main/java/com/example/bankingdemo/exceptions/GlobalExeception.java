@@ -2,6 +2,7 @@ package com.example.bankingdemo.exceptions;
 
 import com.example.bankingdemo.constants.ResponseInfo;
 import com.example.bankingdemo.dto.BankResponse;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,12 +13,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice(basePackages = "com.example.bankingdemo.controller")
+@ControllerAdvice
+@Hidden //UNBLOCKS SWAGGER URL
 public class GlobalExeception {
     ResponseInfo responseInfo = new ResponseInfo();
 
     //    Gson gson = new Gson();
-//TODO: SWAGGER URL HAS BEEN BLOCKED
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<BankResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, Object> errors = new HashMap<>();

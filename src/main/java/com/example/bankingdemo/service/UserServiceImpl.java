@@ -6,6 +6,7 @@ import com.example.bankingdemo.dto.BankResponse;
 import com.example.bankingdemo.dto.UserRequest;
 import com.example.bankingdemo.model.User;
 import com.example.bankingdemo.repository.UserRepository;
+import com.example.bankingdemo.utilities.AccountUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,20 +17,21 @@ import java.math.BigDecimal;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    AccountUtil accountUtil;
 
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
         ResponseInfo responseInfo = new ResponseInfo();
-        String fullName = userRequest.getFirstName() + " " + userRequest.getLastName() + " " + userRequest.getOtherName();
+        String fullName = accountUtil.generateAccountName(userRequest.getFirstName(), userRequest.getLastName(), userRequest.getOtherName());
+        String accountNumber = String.valueOf(accountUtil.generateAccountNumber());
 
 //        CHECK IF USER ALREADY EXISTS
-        if (userRepository.existsByEmail(userRequest.getEmail())) {
-            return BankResponse.builder()
-                    .responseCode(responseInfo.ACCOUNT_ALREADY_EXISTS)
-                    .responseMessage(responseInfo.ACCOUNT_ALREADY_EXISTS_MESSAGE)
-                    .responseData(null)
-                    .build();
+        BankResponse existingUserResponse = accountUtil.ExistingUser(userRequest.getEmail(), userRequest.getPhoneNumber());
+        if (existingUserResponse != null) {
+            return existingUserResponse;
         }
+
 
 //        SET REQUEST DATA TO USER OBJECT
         new User();
@@ -45,9 +47,10 @@ public class UserServiceImpl implements UserService {
                 .altPhoneNumber(userRequest.getAltPhoneNumber())
                 .status("ACTIVE")
                 .accountBalance(BigDecimal.ZERO)
-                .accountNumber("1234567890")
+                .accountNumber(accountNumber)
                 .build();
-//TODO:PHONE NUMBER CANNOT EXISTS TWICE
+
+
 //        SAVE THE USER TO THE DATABASE
         userRepository.save(user);
 
@@ -56,7 +59,8 @@ public class UserServiceImpl implements UserService {
                 .responseMessage(responseInfo.ACCOUNT_CREATED_MESSAGE)
                 .responseData(AccountInfo.builder()
                         .accountName(fullName)
-                        .accountNumber(user.getId().toString())
+                        .accountNumber(accountNumber)
+                        .accountBalance(BigDecimal.ZERO)
                         .build())
                 .build();
     }
