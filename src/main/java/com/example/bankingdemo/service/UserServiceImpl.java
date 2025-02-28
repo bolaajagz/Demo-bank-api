@@ -1,13 +1,11 @@
 package com.example.bankingdemo.service;
 
 import com.example.bankingdemo.constants.ResponseInfo;
-import com.example.bankingdemo.dto.AccountInfo;
-import com.example.bankingdemo.dto.BankResponse;
-import com.example.bankingdemo.dto.Email;
-import com.example.bankingdemo.dto.UserRequest;
+import com.example.bankingdemo.dto.*;
 import com.example.bankingdemo.model.User;
 import com.example.bankingdemo.repository.UserRepository;
 import com.example.bankingdemo.utilities.AccountUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +13,7 @@ import java.math.BigDecimal;
 
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
@@ -35,7 +34,6 @@ public class UserServiceImpl implements UserService {
         if (existingUserResponse != null) {
             return existingUserResponse;
         }
-
 
 //        SET REQUEST DATA TO USER OBJECT
         new User();
@@ -93,16 +91,6 @@ public class UserServiceImpl implements UserService {
                 responseInfo.ACCOUNT_BY_ACCOUNT_NUMBER_SUCCESS_MESSAGE,
                 users.getFirstName() + " " + users.getLastName(),
                 users.getAccountBalance(), users.getAccountNumber());
-
-//                BankResponse.builder()
-//                .responseCode(responseInfo.ACCOUNT_BY_ACCOUNT_NUMBER_SUCCESS)
-//                .responseMessage(responseInfo.ACCOUNT_BY_ACCOUNT_NUMBER_SUCCESS_MESSAGE)
-//                .responseData(AccountInfo.builder()
-//                        .accountName(users.getFirstName() + " " + users.getLastName())
-//                        .accountBalance(users.getAccountBalance())
-//                        .accountNumber(users.getAccountNumber())
-//                        .build())
-//                .build();
     }
 
     @Override
@@ -116,6 +104,73 @@ public class UserServiceImpl implements UserService {
                 responseInfo.ACCOUNT_BY_ACCOUNT_NUMBER_SUCCESS_MESSAGE,
                 users.getFirstName() + " " + users.getLastName() + " " + users.getOtherName(),
                 users.getAccountBalance(), users.getAccountNumber());
+    }
+
+    @Override
+    public BankResponse processTransfer(TransferRequest transferRequest) {
+//        CHECK FOR RECEIVER ACCOUNT NUMBER
+        if (!userRepository.existsByAccountNumber(transferRequest.getReceiverAccountNumber())) {
+            return accountUtil.buildErrorResponse(responseInfo.ACCOUNT_DOES_NOT_EXIST, responseInfo.RECEIVER_ACCOUNT_DOES_NOT_EXIST_MESSAGE);
+        }
+
+//        CHECK FOR SOURCE ACCOUNT NUMBER
+        if (!userRepository.existsByAccountNumber(transferRequest.getSourceAccountNumber())) {
+            return accountUtil.buildErrorResponse(responseInfo.ACCOUNT_DOES_NOT_EXIST, responseInfo.SOURCE_ACCOUNT_DOES_NOT_EXIST_MESSAGE);
+        }
+
+        User userSending = userRepository.findByAccountNumber(transferRequest.getSourceAccountNumber());
+        User userReceiving = userRepository.findByAccountNumber(transferRequest.getReceiverAccountNumber());
+
+//        CHECK SOURCE ACCOUNT BALANCE
+        if (userSending.getAccountBalance().compareTo(transferRequest.getCreditAmount()) < 0) {
+            return accountUtil.buildErrorResponse(responseInfo.INSUFFICENT_FUNDS, responseInfo.INSUFFICENT_FUNDS_MESSAGE);
+        }
+
+//        DEBIT THE SENDER ACCOUNT BALANCE
+        userSending.setAccountBalance(userSending.getAccountBalance().subtract(transferRequest.getCreditAmount()));
+        userRepository.save(userSending);
+
+//        SEND DEBIT EMAIL NOTIFICATION TO THE SENDER
+        try {
+            emailService.sendEmail(Email.builder()
+                    .subject("DEBIT ALERT")
+                    .recipient(userSending.getEmail())
+                    .message("Dear " + userSending.getFirstName() + " " + userSending.getLastName() + ",\n\n" +
+                            "Your account has been successfully debited.\n\n" +
+                            "The amount debited from your bank account is: " + transferRequest.getCreditAmount() + "\n\n" +
+                            "Thank you for banking with us.\n\n" +
+                            "Best Regards,\n" +
+                            "Banking App Team")
+                    .build());
+        } catch (Exception e) {
+            log.info("Debit Alert not sent" + e.getMessage());
+        }
+
+//        CREDIT THE SENDER
+        userReceiving.setAccountBalance(userReceiving.getAccountBalance().add(transferRequest.getCreditAmount()));
+        userRepository.save(userReceiving);
+
+//        SEND CREDIT EMAIL NOTIFICATION TO THE RECEIVER
+        try {
+            emailService.sendEmail(Email.builder()
+                    .subject("DEBIT ALERT")
+                    .recipient(userReceiving.getEmail())
+                    .message("Dear " + userReceiving.getFirstName() + " " + userReceiving.getLastName() + ",\n\n" +
+                            "Your account has been successfully credited.\n\n" +
+                            "The amount credited to your bank account is: " + transferRequest.getCreditAmount() + "\n\n" +
+                            "From userSending.getFirstName() + \" \" + userSending.getLastName()" +
+                            "Thank you for banking with us.\n\n" +
+                            "Best Regards,\n" +
+                            "Banking App Team")
+                    .build());
+        } catch (Exception e) {
+            log.info("Credit  Alert not sent" + e.getMessage());
+        }
+
+        return accountUtil.buildSuccessResponse(responseInfo.TRANSFER_SUCCESS,
+                responseInfo.TRANSFER_SUCCESS_MESSAGE,
+                userReceiving.getFirstName() + " " + userReceiving.getLastName(),
+                userReceiving.getAccountBalance(), userReceiving.getAccountNumber());
     }
 }
 

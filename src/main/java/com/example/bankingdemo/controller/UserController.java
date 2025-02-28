@@ -2,6 +2,7 @@ package com.example.bankingdemo.controller;
 
 import com.example.bankingdemo.dto.BalanceEnquiry;
 import com.example.bankingdemo.dto.BankResponse;
+import com.example.bankingdemo.dto.TransferRequest;
 import com.example.bankingdemo.dto.UserRequest;
 import com.example.bankingdemo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,5 +52,14 @@ public class UserController {
     @GetMapping("/account-details-by-fullname")
     public ResponseEntity<BankResponse> getAccountDetailsWithFullname(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String othername) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAccountDetailsWithFullname(firstname, lastname, othername));
+    }
+
+    @Operation(summary = "Transfer  ", description = "This endpoint credit and debit a user")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TransferRequest.class))}),
+            @ApiResponse(responseCode = "404", description = "Chai! Money no dy your AZA", content = @Content)})
+    @PostMapping("/account/transfer")
+    public ResponseEntity<BankResponse> processTransfer(@RequestBody TransferRequest transferRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.processTransfer(transferRequest));
     }
 }
