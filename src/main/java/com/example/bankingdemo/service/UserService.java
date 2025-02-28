@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     BankResponse createAccount(UserRequest userRequest);
-//    BankResponse getAccountDetails(String accountNumber);
+
+    BankResponse getAccountDetails(String accountNumber);
+
+    BankResponse getAccountDetailsWithFullname(String firstname, String lastname, String othername);
 //    BankResponse depositAmount(String accountNumber, double amount);
 //    BankResponse withdrawAmount(String accountNumber, double amount);
 //    BankResponse transferAmount(String fromAccountNumber, String toAccountNumber, double amount);

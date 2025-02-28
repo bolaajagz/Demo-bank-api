@@ -1,10 +1,13 @@
 package com.example.bankingdemo.utilities;
 
 import com.example.bankingdemo.constants.ResponseInfo;
+import com.example.bankingdemo.dto.AccountInfo;
 import com.example.bankingdemo.dto.BankResponse;
 import com.example.bankingdemo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
 
 @Component
 public class AccountUtil {
@@ -31,5 +34,25 @@ public class AccountUtil {
 
     public String generateAccountName(String firstName, String lastName, String otherName) {
         return firstName + " " + lastName + " " + otherName;
+    }
+
+    public BankResponse buildErrorResponse(String responseCode, String responseMessage) {
+        return BankResponse.builder()
+                .responseCode(responseCode)
+                .responseMessage(responseMessage)
+                .responseData(null)
+                .build();
+    }
+
+    public BankResponse buildSuccessResponse(String responseCode, String responseMessage, String accountName, BigDecimal accountBalnce, String accountNumber) {
+        return BankResponse.builder()
+                .responseCode(responseCode)
+                .responseMessage(responseMessage)
+                .responseData(AccountInfo.builder()
+                        .accountName(accountName)
+                        .accountBalance(accountBalnce)
+                        .accountNumber(accountNumber)
+                        .build())
+                .build();
     }
 }
