@@ -153,12 +153,12 @@ public class UserServiceImpl implements UserService {
 //        SEND CREDIT EMAIL NOTIFICATION TO THE RECEIVER
         try {
             emailService.sendEmail(Email.builder()
-                    .subject("DEBIT ALERT")
+                    .subject("CREDIT ALERT")
                     .recipient(userReceiving.getEmail())
                     .message("Dear " + userReceiving.getFirstName() + " " + userReceiving.getLastName() + ",\n\n" +
                             "Your account has been successfully credited.\n\n" +
                             "The amount credited to your bank account is: " + transferRequest.getCreditAmount() + "\n\n" +
-                            "From userSending.getFirstName() + \" \" + userSending.getLastName()" +
+                            "From " + userSending.getFirstName() + " " + userSending.getLastName() +
                             "Thank you for banking with us.\n\n" +
                             "Best Regards,\n" +
                             "Banking App Team")
