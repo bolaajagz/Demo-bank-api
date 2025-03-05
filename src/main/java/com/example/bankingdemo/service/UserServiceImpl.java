@@ -3,6 +3,7 @@ package com.example.bankingdemo.service;
 import com.example.bankingdemo.constants.ResponseInfo;
 import com.example.bankingdemo.dto.*;
 import com.example.bankingdemo.model.User;
+import com.example.bankingdemo.repository.TransactionRepository;
 import com.example.bankingdemo.repository.UserRepository;
 import com.example.bankingdemo.utilities.AccountUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +20,12 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     AccountUtil accountUtil;
-
     @Autowired
     EmailService emailService;
+    @Autowired
+    TransactionRepository transactionRepository;
+    @Autowired
+    TransactionService transactionService;
     ResponseInfo responseInfo = new ResponseInfo();
 
     @Override
@@ -149,6 +153,16 @@ public class UserServiceImpl implements UserService {
 //        CREDIT THE SENDER
         userReceiving.setAccountBalance(userReceiving.getAccountBalance().add(transferRequest.getCreditAmount()));
         userRepository.save(userReceiving);
+
+//        SAVE TRANSACTION HISTORY
+        TransactionRequest transactionRequest = TransactionRequest.builder()
+                .transactionType("CREDIT")
+                .accountNumber(transferRequest.getReceiverAccountNumber())
+                .amount(transferRequest.getCreditAmount())
+                .build();
+
+
+        transactionService.saveTransaction(transactionRequest);
 
 //        SEND CREDIT EMAIL NOTIFICATION TO THE RECEIVER
         try {
