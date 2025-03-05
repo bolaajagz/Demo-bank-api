@@ -4,6 +4,8 @@ import com.example.bankingdemo.dto.BalanceEnquiry;
 import com.example.bankingdemo.dto.BankResponse;
 import com.example.bankingdemo.dto.TransferRequest;
 import com.example.bankingdemo.dto.UserRequest;
+import com.example.bankingdemo.model.Transaction;
+import com.example.bankingdemo.service.BankStatement;
 import com.example.bankingdemo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/user")
 @Tag(name = "post", description = "User Account Management")
@@ -24,6 +28,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    BankStatement bankStatement;
 
     @Operation(summary = "Create a new account", description = "This endpoint creates a new account for a user")
     @ApiResponses({
@@ -61,5 +67,14 @@ public class UserController {
     @PostMapping("/account/transfer")
     public ResponseEntity<BankResponse> processTransfer(@RequestBody TransferRequest transferRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.processTransfer(transferRequest));
+    }
+
+    @Operation(summary = "Bank Statement  ", description = "This endpoint to get bank statement")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Transaction.class))}),
+            @ApiResponse(responseCode = "404", description = "Chai! Money no dy your AZA o", content = @Content)})
+    @GetMapping("/account/bank-statement")
+    public ResponseEntity<List<Transaction>> processTransfer(@RequestParam String accountNumber, @RequestParam String startDate, @RequestParam String endDate) {
+        return ResponseEntity.status(HttpStatus.OK).body(bankStatement.getTransactions(accountNumber, startDate, endDate));
     }
 }
