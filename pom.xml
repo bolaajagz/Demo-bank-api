@@ -118,7 +118,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.example.bankingdemo</mainClass>
+                            <mainClass>com.example.bankingdemo.BankingDemoApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -136,7 +136,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.example.bankingdemo</mainClass>
+                    <mainClass>com.example.bankingdemo.BankingDemoApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
