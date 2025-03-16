@@ -7,6 +7,7 @@ import com.example.bankingdemo.dto.UserRequest;
 import com.example.bankingdemo.model.Transaction;
 import com.example.bankingdemo.service.BankStatement;
 import com.example.bankingdemo.service.UserService;
+import com.itextpdf.text.DocumentException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.io.FileNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -72,9 +73,9 @@ public class UserController {
     @Operation(summary = "Bank Statement  ", description = "This endpoint to get bank statement")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Transaction.class))}),
-            @ApiResponse(responseCode = "404", description = "Chai! Money no dy your AZA o", content = @Content)})
+            @ApiResponse(responseCode = "404", description = "Ooops! No transaction found between given dates", content = @Content)})
     @GetMapping("/account/bank-statement")
-    public ResponseEntity<List<Transaction>> processTransfer(@RequestParam String accountNumber, @RequestParam String startDate, @RequestParam String endDate) {
+    public ResponseEntity<ResponseEntity<?>> processTransfer(@RequestParam String accountNumber, @RequestParam String startDate, @RequestParam String endDate) throws DocumentException, FileNotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(bankStatement.getTransactions(accountNumber, startDate, endDate));
     }
 }

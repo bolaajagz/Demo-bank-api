@@ -51,6 +51,7 @@ public class GlobalExeception {
 //
 //            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 //        }
+    
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BankResponse> handleGenericException(Exception ex) {

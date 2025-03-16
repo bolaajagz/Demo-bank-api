@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: my-spring-boot-app
+    env: java
+    buildCommand: "./mvnw clean package"
+    startCommand: "java -jar target/my-app.jar"
+    envVars:
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false

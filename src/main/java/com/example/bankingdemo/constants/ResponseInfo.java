@@ -19,4 +19,9 @@ public class ResponseInfo {
     public final String INSUFFICENT_FUNDS_MESSAGE = "Chai! Money no dy your AZA";
     public final String TRANSFER_SUCCESS = "007";
     public final String TRANSFER_SUCCESS_MESSAGE = "Transfer successful";
+    public final String NO_RECORD_FOUND_BETWEEN_DURATION = "008";
+    public final String NO_RECORD_FOUND_BETWEEN_DURATION_MESSAGE = "Oops! No transaction found between the given dates";
+    public final String INVALID_DATE_FORMAT = "009";
+    public final String INVALID_DATE_FORMAT_MESSAGE = "Invalid date format. Please use 'dd-MM-yyyy'.";
+
 }
