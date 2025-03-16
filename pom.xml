@@ -110,7 +110,19 @@
             <!--                    </annotationProcessorPaths>-->
             <!--                </configuration>-->
             <!--            </plugin>-->
-
+            <!-- Maven JAR Plugin to ensure manifest is created properly -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.example.BankingDemoApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
             <!-- Spring Boot Maven Plugin (Updated to match Spring Boot version) -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
