@@ -9,3 +9,9 @@ services:
         sync: false
       - key: MAIL_PASSWORD
         sync: false
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
