@@ -19,7 +19,7 @@
 
     <!-- Properties Section: Update Java version -->
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <start-class>com.example.bankingdemo.BankingDemoApplication</start-class>
     </properties>
 
