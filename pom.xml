@@ -97,55 +97,7 @@
     <!-- Build Section -->
     <build>
         <plugins>
-            <!-- Compiler plugin for annotation processing (Lombok) -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-compiler-plugin</artifactId>-->
-            <!--                <version>3.8.1</version>-->
-            <!--                <configuration>-->
-            <!--                    <annotationProcessorPaths>-->
-            <!--                        <path>-->
-            <!--                            <groupId>org.projectlombok</groupId>-->
-            <!--                            <artifactId>lombok</artifactId>-->
-            <!--                        </path>-->
-            <!--                    </annotationProcessorPaths>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-            <!-- Maven JAR Plugin to ensure manifest is created properly -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-jar-plugin</artifactId>-->
-            <!--                <version>3.2.2</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <goals>-->
-            <!--                            <goal>jar</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--                <configuration>-->
-            <!--                    <classifier>custom</classifier> -->
-            <!--                    <archive>-->
-            <!--                        <manifest>-->
-            <!--                            <addClasspath>true</addClasspath>-->
-            <!--                            <classpathPrefix>lib/</classpathPrefix>-->
-            <!--                            <mainClass>com.example.bankingdemo.BankingDemoApplication</mainClass>-->
-            <!--                        </manifest>-->
-            <!--                    </archive>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-            <!-- Spring Boot Maven Plugin (Updated to match Spring Boot version) -->
             <plugin>
-                <!--                <groupId>org.springframework.boot</groupId>-->
-                <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-                <!--                <version>3.4.3</version>-->
-                <!--                <executions>-->
-                <!--                    <execution>-->
-                <!--                        <goals>-->
-                <!--                            <goal>repackage</goal>-->
-                <!--                        </goals>-->
-                <!--                    </execution>-->
-                <!--                </executions>-->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.4.3</version>
@@ -153,7 +105,6 @@
                 <configuration>
                     <mainClass>com.example.bankingdemo.BankingDemoApplication</mainClass>
                     <layout>JAR</layout>
-                    <!--                    <mainClass>com.example.bankingdemo.BankingDemoApplication</mainClass>-->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
