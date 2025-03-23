@@ -19,7 +19,8 @@
 
     <!-- Properties Section: Update Java version -->
     <properties>
-        <java.version>17</java.version> <!-- Set to Java 17, an LTS version -->
+        <java.version>17</java.version>
+        <start-class>com.example.bankingdemo.BankingDemoApplication</start-class>
     </properties>
 
     <dependencies>
@@ -135,18 +136,24 @@
             <!--            </plugin>-->
             <!-- Spring Boot Maven Plugin (Updated to match Spring Boot version) -->
             <plugin>
+                <!--                <groupId>org.springframework.boot</groupId>-->
+                <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+                <!--                <version>3.4.3</version>-->
+                <!--                <executions>-->
+                <!--                    <execution>-->
+                <!--                        <goals>-->
+                <!--                            <goal>repackage</goal>-->
+                <!--                        </goals>-->
+                <!--                    </execution>-->
+                <!--                </executions>-->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.4.3</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
+
+
                 <configuration>
                     <mainClass>com.example.bankingdemo.BankingDemoApplication</mainClass>
+                    <layout>JAR</layout>
+                    <!--                    <mainClass>com.example.bankingdemo.BankingDemoApplication</mainClass>-->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -154,6 +161,13 @@
                         </exclude>
                     </excludes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
