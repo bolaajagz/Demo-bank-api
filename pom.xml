@@ -123,6 +123,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <classifier>custom</classifier>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
